@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token42Art NFT - Demo</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .nft-display {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .nft-placeholder {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .contract-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .contract-info h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .info-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+        .label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .value {
+            color: #007bff;
+            word-break: break-all;
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .steps {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .steps h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .step {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Token42Art NFT Project</h1>
+        
+        <div class="nft-display">
+            <div class="nft-placeholder">
+                42
+            </div>
+            <p><strong>Token42Art by thi-phng</strong></p>
+            <p>A unique NFT for the 42 school project</p>
+        </div>
+
+        <div class="contract-info">
+            <h3>📄 Contract Information</h3>
+            <div class="info-item">
+                <span class="label">Contract Name:</span>
+                <span class="value">Token42NFT</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Symbol:</span>
+                <span class="value">T42A</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Standard:</span>
+                <span class="value">ERC-721</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Max Supply:</span>
+                <span class="value">42 tokens</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Network:</span>
+                <span class="value">BSC Testnet</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Contract Address:</span>
+                <span class="value" id="contractAddress">Will be available after deployment</span>
+            </div>
+        </div>
+
+        <div class="steps">
+            <h3>🚀 Next Steps</h3>
+            <div class="step">1. Create your artwork with the number "42"</div>
+            <div class="step">2. Upload image to IPFS (using Pinata or similar)</div>
+            <div class="step">3. Deploy the smart contract to BSC Testnet</div>
+            <div class="step">4. Mint your NFT using the deployment script</div>
+            <div class="step">5. Verify ownership and functionality</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://testnet.bscscan.com/" target="_blank" class="button">
+                🔍 BSC Testnet Explorer
+            </a>
+            <a href="https://testnet.binance.org/faucet-smart" target="_blank" class="button">
+                💧 Get Testnet BNB
+            </a>
+            <a href="https://pinata.cloud/" target="_blank" class="button">
+                📁 IPFS Storage (Pinata)
+            </a>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #d1ecf1; border-radius: 5px;">
+            <h4>📋 Project Requirements Status:</h4>
+            <ul>
+                <li>✅ Smart contract created (ERC-721)</li>
+                <li>✅ Includes number "42" in metadata</li>
+                <li>✅ Artist name is login (thi-phng)</li>
+                <li>✅ Code is well commented</li>
+                <li>✅ Documentation provided</li>
+                <li>⏳ Image creation (your task)</li>
+                <li>⏳ IPFS upload (your task)</li>
+                <li>⏳ Contract deployment (your task)</li>
+                <li>⏳ NFT minting (your task)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
