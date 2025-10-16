@@ -23,9 +23,13 @@ if [ "$MINT_TYPE" != "beautiful" ] && [ "$MINT_TYPE" != "bonus" ]; then
     exit 1
 fi
 
-# Check if .env file exists
-if [ ! -f "../.env" ]; then
-    echo "❌ .env file not found. Please create one with:"
+# Get the script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Check if .env file exists in project root
+if [ ! -f "$PROJECT_ROOT/.env" ]; then
+    echo "❌ .env file not found in project root. Please create one with:"
     echo "RPC=https://your_rpc_url"
     echo "PRIVATE_KEY=0xYOUR_PRIVATE_KEY"
     echo "RECIPIENT_ADDRESS=0xRECIPIENT_ADDRESS"
@@ -33,7 +37,7 @@ if [ ! -f "../.env" ]; then
 fi
 
 # Source environment variables
-source ../.env
+source "$PROJECT_ROOT/.env"
 
 # Check required variables
 if [ -z "$RPC" ] || [ -z "$PRIVATE_KEY" ] || [ -z "$RECIPIENT_ADDRESS" ]; then

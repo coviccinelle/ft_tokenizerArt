@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>42 NFT Mint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #connectWallet {
+            background: #667eea;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        #mintBeautiful {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        #mintBonus {
+            background: #4ecdc4;
+            color: white;
+        }
+        
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            font-weight: bold;
+        }
+        
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        
+        .mint-buttons {
+            display: none;
+        }
+        
+        .mint-buttons.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 42 NFT Collection</h1>
+        
+        <div style="font-size: 12px; color: #666; margin-bottom: 20px; background: #f5f5f5; padding: 8px; border-radius: 5px; cursor: pointer;" onclick="copyContract()" title="Click to copy">
+            📋 Contract: 0xFcE8...caaf
+        </div>
+        
+        <button id="connectWallet">Connect MetaMask Wallet</button>
+        
+        <div id="mintButtons" class="mint-buttons">
+            <button id="mintBeautiful" disabled>🎨 Mint Beautiful NFT (IPFS)</button>
+            <button id="mintBonus" disabled>🎁 Mint Bonus NFT (On-Chain)</button>
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const CONTRACT_ADDRESS = "0xFcE8134d569F41Fb05b52A081B9197840148caaf";
+        
+        // Contract ABI for the functions we need
+        const CONTRACT_ABI = [
+            {
+                "inputs": [{"internalType": "address", "name": "to", "type": "address"}],
+                "name": "mintBeautiful",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "to", "type": "address"}],
+                "name": "mintBonus", 
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }
+        ];
+        
+        let userAddress;
+        
+        // Function to wait for transaction confirmation
+        async function waitForTransaction(txHash) {
+            let attempts = 0;
+            const maxAttempts = 60; // 5 minutes max wait
+            
+            while (attempts < maxAttempts) {
+                try {
+                    const receipt = await window.ethereum.request({
+                        method: 'eth_getTransactionReceipt',
+                        params: [txHash]
+                    });
+                    
+                    if (receipt) {
+                        console.log('Transaction confirmed!', receipt);
+                        return receipt;
+                    }
+                    
+                    // Wait 5 seconds before next check
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    attempts++;
+                    
+                    if (attempts % 6 === 0) { // Every 30 seconds
+                        showStatus(`Still waiting... (${Math.floor(attempts * 5 / 60)}min)`, 'info');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error checking transaction:', error);
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    attempts++;
+                }
+            }
+            
+            throw new Error('Transaction timeout - check manually on Etherscan');
+        }
+        
+        async function connectWallet() {
+            try {
+                showStatus('Connecting...', 'info');
+                
+                // Check MetaMask
+                if (!window.ethereum) {
+                    showStatus('Please install MetaMask!', 'error');
+                    return;
+                }
+                
+                console.log('MetaMask found, requesting accounts...');
+                
+                // Request accounts
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                console.log('Accounts received:', accounts);
+                
+                if (accounts.length === 0) {
+                    showStatus('No accounts found!', 'error');
+                    return;
+                }
+                
+                userAddress = accounts[0];
+                showStatus('Checking network...', 'info');
+                
+                // Check network (Sepolia = 11155111 = 0xaa36a7)
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                console.log('Chain ID:', chainId);
+                
+                if (chainId !== '0xaa36a7') {
+                    showStatus(`Wrong network! Please switch to Sepolia testnet!`, 'error');
+                    return;
+                }
+                
+                // Update UI
+                document.getElementById("connectWallet").textContent = "Connected ✅";
+                document.getElementById("connectWallet").disabled = true;
+                document.getElementById("mintButtons").classList.add("show");
+                document.getElementById("mintBeautiful").disabled = false;
+                document.getElementById("mintBonus").disabled = false;
+                
+                showStatus('Wallet connected successfully!', 'success');
+                console.log('Connection successful!');
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                showStatus(`Failed: ${error.message || error.code || 'Unknown error'}`, 'error');
+            }
+        }
+        
+        async function mintBeautiful() {
+            try {
+                document.getElementById("mintBeautiful").disabled = true;
+                showStatus('Minting Beautiful NFT...', 'info');
+                
+                // Encode function call
+                const functionSelector = '0x12bc43b8'; // mintBeautiful(address)
+                const paddedAddress = userAddress.slice(2).padStart(64, '0');
+                const data = functionSelector + paddedAddress;
+                
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [{
+                        from: userAddress,
+                        to: CONTRACT_ADDRESS,
+                        data: data,
+                        gas: '0x15f90', // 90000 gas
+                    }]
+                });
+                
+                const etherscanUrl = `https://sepolia.etherscan.io/tx/${tx}`;
+                showStatus(`Transaction sent! Check: ${tx.slice(0,10)}... | Waiting for confirmation...`, 'info');
+                console.log('Transaction hash:', tx);
+                console.log('Etherscan:', etherscanUrl);
+                
+                // Wait for transaction receipt
+                await waitForTransaction(tx);
+                showStatus('Beautiful NFT minted successfully! 🎨 Check Etherscan for details.', 'success');
+                
+            } catch (error) {
+                console.error('Mint error:', error);
+                showStatus('Mint failed: ' + (error.message || 'Unknown error'), 'error');
+            } finally {
+                setTimeout(() => {
+                    document.getElementById("mintBeautiful").disabled = false;
+                }, 5000);
+            }
+        }
+        
+        async function mintBonus() {
+            try {
+                document.getElementById("mintBonus").disabled = true;
+                showStatus('Minting Bonus NFT...', 'info');
+                
+                // Encode function call
+                const functionSelector = '0x957b781c'; // mintBonus(address)
+                const paddedAddress = userAddress.slice(2).padStart(64, '0');
+                const data = functionSelector + paddedAddress;
+                
+                const tx = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [{
+                        from: userAddress,
+                        to: CONTRACT_ADDRESS,
+                        data: data,
+                        gas: '0x15f90', // 90000 gas
+                    }]
+                });
+                
+                const etherscanUrl = `https://sepolia.etherscan.io/tx/${tx}`;
+                showStatus(`Transaction sent! Check: ${tx.slice(0,10)}... | Waiting for confirmation...`, 'info');
+                console.log('Transaction hash:', tx);
+                console.log('Etherscan:', etherscanUrl);
+                
+                // Wait for transaction receipt
+                await waitForTransaction(tx);
+                showStatus('Bonus NFT minted successfully! 🎁 Check Etherscan for details.', 'success');
+                
+            } catch (error) {
+                console.error('Mint error:', error);
+                showStatus('Mint failed: ' + (error.message || 'Unknown error'), 'error');
+            } finally {
+                setTimeout(() => {
+                    document.getElementById("mintBonus").disabled = false;
+                }, 5000);
+            }
+        }
+        
+        function showStatus(message, type) {
+            const status = document.getElementById("status");
+            status.textContent = message;
+            status.className = type;
+            status.style.display = "block";
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    status.style.display = "none";
+                }, 8000);
+            }
+        }
+        
+        function copyContract() {
+            navigator.clipboard.writeText(CONTRACT_ADDRESS).then(() => {
+                showStatus('Contract address copied! 📋', 'success');
+            }).catch(() => {
+                showStatus('Copy failed. Address: ' + CONTRACT_ADDRESS, 'info');
+            });
+        }
+        
+        // Event listeners
+        document.getElementById("connectWallet").addEventListener("click", connectWallet);
+        document.getElementById("mintBeautiful").addEventListener("click", mintBeautiful);
+        document.getElementById("mintBonus").addEventListener("click", mintBonus);
+        
+        // Auto-connect if wallet is already connected
+        window.addEventListener('load', async () => {
+            if (window.ethereum) {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    if (accounts.length > 0) {
+                        console.log('Auto-connecting...');
+                        connectWallet();
+                    }
+                } catch (error) {
+                    console.log('Auto-connect failed:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
