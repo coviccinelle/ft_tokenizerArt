@@ -1,4 +1,6 @@
 const { ethers } = require("hardhat");
+const fs = require('fs');
+const path = require('path');
 
 async function main() {
   console.log("🚀 Starting deployment of Token42NFT...");
@@ -8,62 +10,52 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
   
   // Check deployer balance
-  const balance = await deployer.getBalance();
-  console.log("Account balance:", ethers.utils.formatEther(balance), "ETH");
+  const balance = await deployer.provider.getBalance(deployer.address);
+  console.log("Account balance:", ethers.formatEther(balance), "ETH");
   
   // Deploy the contract
   const Token42NFT = await ethers.getContractFactory("Token42NFT");
   console.log("Deploying Token42NFT contract...");
   
-  const token42NFT = await Token42NFT.deploy(deployer.address);
-  await token42NFT.deployed();
+  const contract = await Token42NFT.deploy();
+  await contract.waitForDeployment();
+  const contractAddress = await contract.getAddress();
   
-  console.log("✅ Token42NFT deployed to:", token42NFT.address);
-  console.log("Contract owner:", await token42NFT.owner());
+  console.log("✅ Token42NFT deployed to:", contractAddress);
+  console.log("Network:", network.name);
   
   // Verify contract deployment
-  console.log("Contract name:", await token42NFT.name());
-  console.log("Contract symbol:", await token42NFT.symbol());
-  console.log("Max supply:", await token42NFT.MAX_SUPPLY());
-  console.log("Current supply:", await token42NFT.totalSupply());
+  console.log("Contract name:", await contract.name());
+  console.log("Contract symbol:", await contract.symbol());
+  console.log("Max supply:", await contract.MAX_SUPPLY());
+  console.log("Current supply:", await contract.totalSupply());
   
-  // Save deployment info
+  // Save deployment info to a simple file
   const deploymentInfo = {
-    network: hardhat.network.name,
-    contractAddress: token42NFT.address,
+    network: network.name,
+    contractAddress: contractAddress,
     deployerAddress: deployer.address,
     deploymentTime: new Date().toISOString(),
-    transactionHash: token42NFT.deployTransaction.hash,
-    blockNumber: token42NFT.deployTransaction.blockNumber
+    transactionHash: contract.deploymentTransaction().hash
   };
   
   console.log("\n📄 Deployment Summary:");
   console.log("Network:", deploymentInfo.network);
   console.log("Contract Address:", deploymentInfo.contractAddress);
   console.log("Transaction Hash:", deploymentInfo.transactionHash);
-  console.log("Block Number:", deploymentInfo.blockNumber);
   
-  // Save to file
-  const fs = require('fs');
-  const path = require('path');
-  
-  const deploymentDir = path.join(__dirname, '../../deployment');
-  if (!fs.existsSync(deploymentDir)) {
-    fs.mkdirSync(deploymentDir, { recursive: true });
-  }
-  
+  // Save contract address to root directory
   fs.writeFileSync(
-    path.join(deploymentDir, `deployment-${deploymentInfo.network}.json`),
-    JSON.stringify(deploymentInfo, null, 2)
+    path.join(__dirname, '../../contract-address.txt'),
+    `Contract Address: ${contractAddress}\nNetwork: ${network.name}\nDeployed: ${deploymentInfo.deploymentTime}`
   );
   
-  console.log("💾 Deployment info saved to deployment folder");
+  console.log("💾 Contract address saved to contract-address.txt");
+  console.log("\n🎯 Next step: Update CONTRACT_ADDRESS in scripts/mint.js");
   
-  return token42NFT;
+  return contract;
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main()
   .then(() => process.exit(0))
   .catch((error) => {

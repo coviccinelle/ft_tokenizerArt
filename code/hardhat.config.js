@@ -1,5 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" }); // Load from root
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -17,23 +17,23 @@ module.exports = {
     localhost: {
       url: "http://127.0.0.1:8545"
     },
-    // Ethereum Sepolia Testnet (recommended for ETH)
+    // Ethereum Sepolia Testnet
     sepolia: {
-      url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      url: process.env.SEPOLIA_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com",
       chainId: 11155111,
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-    // Ethereum Goerli Testnet (alternative)
-    goerli: {
-      url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      chainId: 5,
+    // Ethereum Mainnet (for reference)
+    mainnet: {
+      url: process.env.MAINNET_RPC_URL || "https://ethereum-rpc.publicnode.com",
+      chainId: 1,
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     }
   },
   etherscan: {
     apiKey: {
       sepolia: process.env.ETHERSCAN_API_KEY || "",
-      goerli: process.env.ETHERSCAN_API_KEY || ""
+      mainnet: process.env.ETHERSCAN_API_KEY || ""
     }
   }
 };

@@ -108,7 +108,7 @@
                 42
             </div>
             <p><strong>Token42Art by thi-phng</strong></p>
-            <p>A unique NFT for the 42 school project</p>
+            <p>A unique on-chain NFT for the 42 school project</p>
         </div>
 
         <div class="contract-info">
@@ -119,7 +119,7 @@
             </div>
             <div class="info-item">
                 <span class="label">Symbol:</span>
-                <span class="value">T42A</span>
+                <span class="value">42ART</span>
             </div>
             <div class="info-item">
                 <span class="label">Standard:</span>
@@ -127,11 +127,15 @@
             </div>
             <div class="info-item">
                 <span class="label">Max Supply:</span>
-                <span class="value">42 tokens</span>
+                <span class="value">1,000 tokens</span>
             </div>
             <div class="info-item">
                 <span class="label">Network:</span>
-                <span class="value">BSC Testnet</span>
+                <span class="value">Ethereum Sepolia Testnet</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Storage:</span>
+                <span class="value">Fully On-Chain (no IPFS needed)</span>
             </div>
             <div class="info-item">
                 <span class="label">Contract Address:</span>
@@ -140,23 +144,20 @@
         </div>
 
         <div class="steps">
-            <h3>🚀 Next Steps</h3>
-            <div class="step">1. Create your artwork with the number "42"</div>
-            <div class="step">2. Upload image to IPFS (using Pinata or similar)</div>
-            <div class="step">3. Deploy the smart contract to BSC Testnet</div>
-            <div class="step">4. Mint your NFT using the deployment script</div>
-            <div class="step">5. Verify ownership and functionality</div>
+            <h3>🚀 Quick Setup Steps</h3>
+            <div class="step">1. Copy .env.example to .env and add your private key</div>
+            <div class="step">2. Install dependencies: cd code/ && npm install</div>
+            <div class="step">3. Deploy contract: npm run deploy</div>
+            <div class="step">4. Update contract address in scripts/mint.js</div>
+            <div class="step">5. Mint your NFT: npm run mint</div>
         </div>
 
         <div style="text-align: center; margin-top: 30px;">
-            <a href="https://testnet.bscscan.com/" target="_blank" class="button">
-                🔍 BSC Testnet Explorer
+            <a href="https://sepolia.etherscan.io/" target="_blank" class="button">
+                🔍 Sepolia Explorer
             </a>
-            <a href="https://testnet.binance.org/faucet-smart" target="_blank" class="button">
-                💧 Get Testnet BNB
-            </a>
-            <a href="https://pinata.cloud/" target="_blank" class="button">
-                📁 IPFS Storage (Pinata)
+            <a href="https://sepoliafaucet.com/" target="_blank" class="button">
+                💧 Get Test ETH
             </a>
         </div>
 
@@ -164,14 +165,12 @@
             <h4>📋 Project Requirements Status:</h4>
             <ul>
                 <li>✅ Smart contract created (ERC-721)</li>
-                <li>✅ Includes number "42" in metadata</li>
+                <li>✅ Includes number "42" in artwork</li>
                 <li>✅ Artist name is login (thi-phng)</li>
                 <li>✅ Code is well commented</li>
                 <li>✅ Documentation provided</li>
-                <li>⏳ Image creation (your task)</li>
-                <li>⏳ IPFS upload (your task)</li>
-                <li>⏳ Contract deployment (your task)</li>
-                <li>⏳ NFT minting (your task)</li>
+                <li>✅ On-chain storage (no external dependencies)</li>
+                <li>✅ Ready for deployment and minting</li>
             </ul>
         </div>
     </div>

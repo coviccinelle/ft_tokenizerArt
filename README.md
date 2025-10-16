@@ -1,152 +1,62 @@
-# ft_tokenizerArt
-web3 project at 42 to create an NFT
+# 🎨 Token42Art NFT
 
-## ✅ Project Setup Complete!
+A minimal NFT project for 42 school featuring on-chain generative art with the number "42".
 
-This is a simple NFT project that fulfills all the 42 school requirements. Here's what has been created:
+## ✨ Features
 
-### 📁 Project Structure
-- `code/` - Smart contract and deployment scripts
-- `deployment/` - Contract deployment records  
-- `mint/` - NFT minting records
-- `documentation/` - Complete project documentation
+- **Fully On-Chain**: All artwork stored directly on blockchain (no IPFS needed)
+- **22 Unique Designs**: Random generation from pre-built SVG patterns
+- **Simple Setup**: Deploy and mint in under 10 minutes
+- **No External Dependencies**: Everything stored on-chain
 
-### 🚀 Quick Start Guide
+## 🚀 Quick Start
 
-1. **Install dependencies**:
-   ```bash
-   cd code/
-   npm install
-   ```
+```bash
+# 1. Setup environment
+cp .env.example .env
+# Edit .env and add your private key
 
-2. **Set up your wallet**:
-   - Copy `.env.example` to `.env`
-   - Add your MetaMask private key
-   - Get testnet BNB from BSC faucet
+# 2. Install & deploy
+cd code/
+npm install
+npm run deploy
 
-3. **Deploy contract**:
-   ```bash
-   npm run deploy:testnet
-   ```
+# 3. Mint NFT
+# Update contract address in scripts/mint.js
+npm run mint
+```
 
-4. **Create and upload your "42" artwork to IPFS**
+## 📁 Project Structure
 
-5. **Mint your NFT**:
-   ```bash
-   npx hardhat run scripts/mint.js --network bsc_testnet
-   ```
+```
+├── .env.example          # Environment variables template
+├── contract-address.txt  # Deployed contract info (auto-generated)
+├── code/                 # Smart contract code
+│   ├── Token42NFT.sol   # Main NFT contract
+│   ├── scripts/
+│   │   ├── deploy.js    # Deployment script
+│   │   └── mint.js      # Minting script
+│   └── package.json     # Dependencies
+├── documentation/        # Project docs
+├── SVGs/                # 22 SVG artworks (optional reference)
+└── web/                 # Simple web interface
+```
 
-### 📋 Requirements Status
-- ✅ ERC-721 NFT contract created
-- ✅ Includes number "42" requirement
-- ✅ Uses testnet (no real money)
+## 🔍 Technical Details
+
+- **Standard**: ERC-721
+- **Network**: Ethereum Sepolia Testnet
+- **Supply**: 1,000 total NFTs
+- **Price**: 0.001 ETH
+- **Storage**: Fully on-chain (Base64 encoded SVGs)
+
+## 📋 Requirements Status
+
+- ✅ ERC-721 NFT contract
+- ✅ Includes number "42"
+- ✅ Artist name: thi-phng
+- ✅ Testnet deployment
 - ✅ Complete documentation
-- ✅ Proper folder structure
-- ⏳ Your artwork creation needed
-- ⏳ IPFS upload needed
-- ⏳ Deployment execution needed
+- ✅ On-chain storage
 
-See `documentation/README.md` for detailed instructions!
-
-Objectives
-As a participant in this project, you will have the opportunity to contribute to the cre-
-ation of a digital asset on the blockchain. This project is designed to challenge you in
-several areas, including your ability to become proficient in multiple programming lan-
-guages and your familiarity with public blockchain technology.
-While a strong background in cryptography is not required for this project, you should
-be prepared to learn and adapt as you work towards creating your own digital asset. This
-project will require you to think critically and creatively, as well as to push yourself out
-of your comfort zone as you navigate the complexities of blockchain technology.
-Ultimately, your participation in this project will not only help you develop valuable
-skills and knowledge, but it will also allow you to be part of something truly innovative
-and exciting. Are you ready to take on the challenge?
-Let us begin!
-4Chapter IV
-Mandatory part
-IV.1
-Creating the image of your NFT
-In order to create a non-fungible token, there are several technical requirements that
-must be met.
-You are free to choose the representation of your non-fungible token.
-Your only constraint is to include the number 42 in it. It is of
-course forbidden to use insulting terms or images under penalty of
-punishment.
-For example, this image is not good as the 42 is incorrectly displayed, while the other
-images in the topic are correct:
-Your image must be stored using distributed registry technology
-(IPFS, for example)
-5TokenizeArt
-IV.2
-Build your own NFT
-Deploying your contract
-You must create a README.md file at the root of your repository explaining the choices
-you made and the reasons behind them.
-The language used is of course free, but you must respect the
-standards of the blockchain you are going to use (for example ERC721
-for ETH, or BEP-721 for BSC).
-First and foremost, you will need to choose a blockchain platform that supports the
-creation of non-fungible token. There are many different options to choose from, each
-with its own unique features and capabilities.
-You must also manage the metadata for your NFT (the artist’s name
-must be your login and the name must include 42 and a title).
-Once you have selected a platform, you will need to become proficient in the pro-
-gramming language used by that platform in order to develop your non-fungible token.
-Different platforms use different programming languages, so you will need to ensure that
-you have the necessary skills to work with the language of your chosen platform such as
-IDE, Truffle, Remix or Hardhat.
-Make sure you understand what you are doing. You will never be asked
-to use real money or your coins for this project. There are test
-chains to avoid this problem, such as the BSC Testnet chain
-You must submit the code used to create your non-fungible token in a code folder
-located at the root of your repository. You should be careful to comment your code and
-to use readable and explicit variable/function names.
-During your evaluation there will be a code review.
-You must be very careful about how you demonstrate the operation of your non-
-fungible token. You must be able to perform minimalist actions to demonstrate its
-operation. You need to think about all aspects of security such as ownership or privileges.
-6TokenizeArt
-IV.3
-Build your own NFT
-Mint your NFT
-You should also place all the necessary files for the deployment of your non-fungible token
-in a second folder with a name of your choice
-After you have minted your non-fungible token on a public blockchain, please mention
-the public address and the network used in your Git repository. You should be able to
-display your NFT.
-you need to be able to confirm the owner of an NFT, for example using
-the ownerOf function in Solidity.
-Finally, you should have a folder containing the documentation for this project. This
-folder, named documentation, should be located at the root of your repository. It should
-be possible to understand how it works and what is needed to use your non-fungible token.
-You will need to have a clear understanding of how your NFT will be used and what
-it will represent. This may require the development of a whitepaper or other documen-
-tation outlining the features and functionality of your non-fungible token.
-You must take the time to make a clear and explicit documentation.
-This will be reviewed during your evaluation.
-Consider also creating a demo video to showcase your NFT and its features to poten-
-tial users and investors.
-If you want to make a video demo you do not have to push the video to
-your repository; a simple link will suffice! Creating a demo video
-is not required. You will not get a better grade by creating this
-video.
-Below is an example of the expected directory structure:
-$> ls -al
-total XX
-drwxrwxr-x 3 eagle eagle 4096 avril 42 20:42 .
-drwxrwxrwt 17 eagle eagle 4096 avril 42 20:42 ..
--rw-rw-r-- 1 eagle eagle XXXX avril 42 20:42 README.md
-drwxrwxr-x 3 eagle eagle 4096 avril 42 20:42 code
-drwxrwxr-x 3 eagle eagle 4096 avril 42 20:42 deployment
-drwxrwxr-x 3 eagle eagle 4096 avril 42 20:42 mint
-drwxrwxr-x 3 eagle eagle 4096 avril 42 20:42 documentation
-7Chapter V
-Bonus part
-Here are some bonuses that could be very useful :
-• A beautiful NFT
-• A website where you can mint your NFT with a graphical interface
-• You need to manage your NFT Inscriptions, i.e. store your metadata and image
-storage directly on-chain
-The bonus part will only be assessed if the mandatory part is
-PERFECT. Perfect means the mandatory part has been fully completed
-and works flawlessly. If you have not passed ALL the mandatory
-requirements, your bonus part will not be evaluated at all.
+See `documentation/complete-guide.md` for detailed instructions.
