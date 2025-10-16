@@ -1,0 +1,22 @@
+{
+  "name": "token42art-nft",
+  "version": "1.0.0",
+  "description": "Simple NFT project for 42 school featuring on-chain art with the number 42",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js --network sepolia",
+    "mint": "hardhat run scripts/mint.js --network sepolia",
+    "test": "hardhat test"
+  },
+  "keywords": ["NFT", "ERC721", "42", "blockchain"],
+  "author": "thi-phng",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.3.1"
+  }
+}
