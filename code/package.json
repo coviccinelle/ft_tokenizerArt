@@ -1,24 +1,22 @@
 {
-  "name": "ft-tokenizer-art",
+  "name": "token42art-nft",
   "version": "1.0.0",
-  "description": "A simple NFT project for 42 school",
-  "main": "index.js",
+  "description": "Simple NFT project for 42 school featuring on-chain art with the number 42",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test",
-    "deploy": "hardhat run scripts/deploy.js",
-    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
-    "deploy:goerli": "hardhat run scripts/deploy.js --network goerli"
+    "deploy": "hardhat run scripts/deploy.js --network sepolia",
+    "mint": "hardhat run scripts/mint.js --network sepolia",
+    "test": "hardhat test"
   },
   "keywords": ["NFT", "ERC721", "42", "blockchain"],
   "author": "thi-phng",
   "license": "MIT",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^3.0.2",
-    "hardhat": "^2.17.0"
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.9.3",
+    "@openzeppelin/contracts": "^5.0.0",
     "dotenv": "^16.3.1"
   }
 }

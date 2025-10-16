@@ -10,8 +10,6 @@
 - Handles deployments to real networks
 - Built-in testing framework
 
-**ANALOGY**: Like an IDE for blockchain development
-
 ### **OpenZeppelin** 🛡️
 **WHAT**: Library of secure smart contract templates
 **WHY**:
@@ -19,8 +17,6 @@
 - Industry standard implementations
 - Saves development time
 - Reduces bugs
-
-**ANALOGY**: Like using a proven recipe instead of experimenting
 
 ### **Node.js & npm** 📚
 **WHAT**: JavaScript runtime and package manager
@@ -33,7 +29,6 @@
 **WHAT**: Secure way to store sensitive data
 **WHY**:
 - Keeps private keys safe
-- API keys separate from code
 - Never committed to git
 
 ## Network Configuration:
@@ -50,15 +45,9 @@
 2. Enter your wallet address
 3. Receive free test ETH
 
-### **Infura** 🌐
-**WHAT**: Ethereum node provider
+### **Public RPC Endpoints** 🌐
+**WHAT**: Free blockchain connection endpoints
 **WHY**:
-- You don't need to run your own Ethereum node
-- Reliable connection to Ethereum network
-- Free tier available
-
-**HOW TO SET UP**:
-1. Go to https://infura.io/
-2. Create free account
-3. Create new project
-4. Copy Project ID to .env file
+- No API keys needed
+- Free forever
+- Reliable public infrastructure
