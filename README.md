@@ -1,62 +1,89 @@
-# 🎨 Token42Art NFT
+# 🎨 42 NFT Collection
 
-A minimal NFT project for 42 school featuring on-chain generative art with the number "42".
+Hybrid NFT storage: Beautiful SVGs on IPFS, Bonus SVGs on-chain.
 
-## ✨ Features
-
-- **Fully On-Chain**: All artwork stored directly on blockchain (no IPFS needed)
-- **22 Unique Designs**: Random generation from pre-built SVG patterns
-- **Simple Setup**: Deploy and mint in under 10 minutes
-- **No External Dependencies**: Everything stored on-chain
-
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-# 1. Setup environment
+# Start minting interface
+./manage.sh server
+# Open: http://localhost:3000/native-mint.html
+```
+
+## Contract
+- **Address**: `0xFcE8134d569F41Fb05b52A081B9197840148caaf`
+- **Network**: Sepolia
+- **IPFS**: `bafybeifuat6mqtsgaotpz2cdw6botsxdgggaicflcrqxgentiic5kec6ze`
+
+## Commands
+
+```bash
+./manage.sh deploy      # Deploy contract
+./manage.sh test        # Run tests (for demo/validation)
+./manage.sh update      # Update IPFS hash (if needed)
+./manage.sh mint beautiful 0x123...  # Mint beautiful NFT
+./manage.sh server      # Start web interface
+./manage.sh status      # Show status
+```
+
+## Structure
+
+```
+├── code/          # Smart contract
+├── web/           # Minting interface
+├── SVGs/beautiful/ # 22 IPFS designs
+├── manage.sh      # One script for everything
+└── .env           # Your keys
+```
+
+**Simple. Works. Done.** ✨
+
+## 🔧 Environment Setup
+
+```bash
+# Copy environment template
 cp .env.example .env
-# Edit .env and add your private key
 
-# 2. Install & deploy
-cd code/
-npm install
-npm run deploy
-
-# 3. Mint NFT
-# Update contract address in scripts/mint.js
-npm run mint
+# Add your keys to .env:
+PRIVATE_KEY=your_private_key
+PINATA_API_KEY=your_pinata_key
+PINATA_SECRET_KEY=your_pinata_secret
 ```
 
-## 📁 Project Structure
+## 📋 Contract Functions
 
-```
-├── .env.example          # Environment variables template
-├── contract-address.txt  # Deployed contract info (auto-generated)
-├── code/                 # Smart contract code
-│   ├── Token42NFT.sol   # Main NFT contract
-│   ├── scripts/
-│   │   ├── deploy.js    # Deployment script
-│   │   └── mint.js      # Minting script
-│   └── package.json     # Dependencies
-├── documentation/        # Project docs
-├── SVGs/                # 22 SVG artworks (optional reference)
-└── web/                 # Simple web interface
+```solidity
+// Mint beautiful NFT (IPFS)
+function mintBeautiful(address to) external
+
+// Mint bonus NFT (on-chain)  
+function mintBonus(address to) external
+
+// Set IPFS hash (owner only)
+function setIPFSHash(string calldata hash) external
 ```
 
-## 🔍 Technical Details
+## 🌐 IPFS Integration
 
-- **Standard**: ERC-721
-- **Network**: Ethereum Sepolia Testnet
-- **Supply**: 1,000 total NFTs
-- **Price**: 0.001 ETH
-- **Storage**: Fully on-chain (Base64 encoded SVGs)
+Beautiful NFTs use IPFS storage:
+- **Gateway**: `https://gateway.pinata.cloud/ipfs/{hash}`
+- **Files**: `42NFT_1.svg` through `42NFT_22.svg`
+- **Metadata**: JSON with image URL and traits
 
-## 📋 Requirements Status
+## 🎨 NFT Types
 
-- ✅ ERC-721 NFT contract
-- ✅ Includes number "42"
-- ✅ Artist name: thi-phng
-- ✅ Testnet deployment
-- ✅ Complete documentation
-- ✅ On-chain storage
+### Beautiful NFTs
+- 22 unique high-quality SVG designs
+- Stored on IPFS via Pinata
+- Random selection per mint
+- Rich metadata and traits
 
-See `documentation/complete-guide.md` for detailed instructions.
+### Bonus NFTs  
+- Single compact SVG design
+- Fully on-chain storage
+- Permanent and decentralized
+- Lower gas costs
+
+---
+
+**Built for 42 School • Deployed on Sepolia • Ready to Use** 🚀

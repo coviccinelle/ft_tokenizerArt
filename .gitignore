@@ -3,6 +3,10 @@ code/out/
 out/
 build/
 dist/
+broadcast/
+lib/
+cache/
+.github/
 *.o
 *.obj
 *.so

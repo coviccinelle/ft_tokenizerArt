@@ -53,7 +53,7 @@ contract Token42NFT is ERC721, Ownable {
             imageURI = string(abi.encodePacked(
                 "https://gateway.pinata.cloud/ipfs/",
                 ipfsHash,
-                "/42NFT_",
+                "/beautiful/42NFT_",
                 (tokenId % 22 + 1).toString(), // Use tokenId to pick from 1-22
                 ".svg"
             ));
