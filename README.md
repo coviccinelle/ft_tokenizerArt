@@ -29,12 +29,19 @@ Hybrid NFT storage: Beautiful SVGs on IPFS, Bonus SVGs on-chain.
 ## Structure
 
 ```
-├── code/          # Smart contract
-├── web/           # Minting interface
+├── code/           # Smart contract
+├── web/            # Minting interface
 ├── SVGs/beautiful/ # 22 IPFS designs
-├── manage.sh      # One script for everything
-└── .env           # Your keys
+├── documentation/  # Complete guides & references
+├── manage.sh       # One script for everything
+└── .env            # Your keys
 ```
+
+## 📚 Documentation
+
+- **[Complete Technical Guide](documentation/README.md)** - Architecture, tech stack, contracts
+- **[Development Workflow](documentation/development-guide.md)** - Step-by-step build process  
+- **[On-Chain SVG Guide](documentation/onchain-svg-guide.md)** - How to store SVGs on blockchain
 
 **Simple. Works. Done.** ✨
 
