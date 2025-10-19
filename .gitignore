@@ -3,6 +3,8 @@ node_modules/
 dist/
 build/
 out/
+code/lib/
+.gitmodules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
