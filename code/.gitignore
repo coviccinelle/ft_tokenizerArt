@@ -1,5 +1,6 @@
 # Environment variables
 .env
+broadcast/
 
 # Node modules
 node_modules/
