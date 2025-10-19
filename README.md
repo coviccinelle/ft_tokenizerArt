@@ -11,7 +11,7 @@ Hybrid NFT storage: Beautiful SVGs on IPFS, Bonus SVGs on-chain.
 ```
 
 ## Contract
-- **Address**: `0xFcE8134d569F41Fb05b52A081B9197840148caaf`
+- **Address**: see `CONTRACT_ADDRESS` in your `.env` or run `./manage.sh status`
 - **Network**: Sepolia
 - **IPFS**: `bafybeifuat6mqtsgaotpz2cdw6botsxdgggaicflcrqxgentiic5kec6ze`
 

@@ -34,6 +34,19 @@ check_env() {
         exit 1
     fi
     source .env
+    # Write env for web UI
+    write_web_env
+}
+
+# Write a small JSON file consumed by the static web UI (web/env.json)
+write_web_env() {
+    # Ensure web folder exists
+    mkdir -p web
+    cat > web/env.json <<EOF
+{
+  "CONTRACT_ADDRESS": "${CONTRACT_ADDRESS:-0x0000000000000000000000000000000000000000}"
+}
+EOF
 }
 
 deploy() {
@@ -83,7 +96,7 @@ show_status() {
     echo "📊 Project Status"
     echo "================"
     echo ""
-    echo "Contract: 0xFcE8134d569F41Fb05b52A081B9197840148caaf"
+    echo "Contract: ${CONTRACT_ADDRESS:-0x0000000000000000000000000000000000000000}"
     echo "Network: Sepolia"
     echo "IPFS: bafybeifuat6mqtsgaotpz2cdw6botsxdgggaicflcrqxgentiic5kec6ze"
     echo ""
