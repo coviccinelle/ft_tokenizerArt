@@ -1,299 +1,53 @@
-# 🎨 On-Chain SVG Storage - Complete Guide
+# On-Chain SVG (Short Guide)
 
-## 🤔 What is On-Chain Storage?
+Keep-on-chain SVGs short, simple, and gas-aware. Below are the essentials you need to implement and test SVGs embedded in a contract.
 
-On-chain storage means the SVG code is **permanently embedded** in the smart contract on the blockchain, rather than stored on external servers or IPFS.
+Key points
+- Store small SVGs (prefer < 2–3 KB) to keep gas reasonable.
+- Prefer simple shapes, solid fills, and minimal path/text complexity.
+- Use base64 data URIs for compatibility, or plain data URIs for slightly smaller size.
 
-### Benefits
-✅ **Permanent** - Cannot be deleted or changed  
-✅ **Decentralized** - No external dependencies  
-✅ **Trustless** - Fully self-contained  
-✅ **Fast** - No network requests to load images  
-
-### Drawbacks
-❌ **Expensive** - Higher gas costs for deployment  
-❌ **Limited** - Blockchain storage is costly for large files  
-❌ **Immutable** - Cannot update after deployment  
-
----
-
-## 📏 Size Considerations
-
-### Gas Cost Examples
-```
-Storage Size → Deployment Cost (rough estimates)
-500 bytes   → ~50,000 gas    (~$2-5)
-1 KB        → ~100,000 gas   (~$5-10)  
-5 KB        → ~500,000 gas   (~$25-50)
-10 KB       → ~1,000,000 gas (~$50-100)
-```
-
-### Optimization Strategy
-- Keep SVGs under **2-3 KB** for reasonable costs
-- Use simple shapes and solid colors
-- Minimize text and complex paths
-- Remove whitespace and comments
-
----
-
-## 🛠️ Implementation Methods
-
-### Method 1: String Constant (Our Approach)
-```solidity
-contract Token42NFT is ERC721 {
-    string private constant BONUS_SVG = 
-        '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">'
-        '<rect width="400" height="400" fill="#667eea"/>'
-        '<text x="200" y="220" text-anchor="middle" font-family="Arial" '
-        'font-size="80" fill="white" font-weight="bold">42</text>'
-        '</svg>';
-    
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        if (!isBeautifulNFT[tokenId]) {
-            string memory imageURI = string(abi.encodePacked(
-                "data:image/svg+xml;base64,",
-                Base64.encode(bytes(BONUS_SVG))
-            ));
-            // ... rest of metadata generation
-        }
-    }
-}
-```
-
-### Method 2: Constructor Parameter
-```solidity
-contract Token42NFT is ERC721 {
-    string private bonusSVG;
-    
-    constructor(string memory _bonusSVG) ERC721("42 Art", "42ART") {
-        bonusSVG = _bonusSVG;  // Set at deployment
-    }
-}
-```
-
-### Method 3: Setter Function (Updateable)
-```solidity
-contract Token42NFT is ERC721, Ownable {
-    string private bonusSVG;
-    
-    function setBonusSVG(string calldata _svg) external onlyOwner {
-        bonusSVG = _svg;  // Owner can update
-    }
-}
-```
-
----
-
-## 🎯 SVG Optimization Techniques
-
-### 1. Remove Unnecessary Elements
-```svg
-<!-- Before: Verbose -->
-<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" version="1.1">
-  <rect x="0" y="0" width="400" height="400" fill="#667eea" />
-  <text x="200" y="220" text-anchor="middle" font-family="Arial, sans-serif" 
-        font-size="80" font-weight="bold" fill="#ffffff">42</text>
-</svg>
-
-<!-- After: Optimized -->
-<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-<rect width="400" height="400" fill="#667eea"/>
-<text x="200" y="220" text-anchor="middle" font-family="Arial" 
-font-size="80" fill="white" font-weight="bold">42</text>
-</svg>
-```
-
-### 2. Use Short Color Names
-```svg
-<!-- Instead of -->
-fill="#FF0000"    <!-- Use --> fill="red"
-fill="#FFFFFF"    <!-- Use --> fill="white" 
-fill="#000000"    <!-- Use --> fill="black"
-```
-
-### 3. Combine Similar Elements
-```svg
-<!-- Before: Multiple elements -->
-<circle cx="100" cy="100" r="50" fill="blue"/>
-<circle cx="200" cy="100" r="50" fill="blue"/>
-<circle cx="300" cy="100" r="50" fill="blue"/>
-
-<!-- After: Single group -->
-<g fill="blue">
-<circle cx="100" cy="100" r="50"/>
-<circle cx="200" cy="100" r="50"/>
-<circle cx="300" cy="100" r="50"/>
-</g>
-```
-
-### 4. Minimize Decimal Precision
-```svg
-<!-- Before -->
-<path d="M 12.3456 45.7890 L 98.7654 123.4567"/>
-
-<!-- After -->  
-<path d="M 12.3 45.8 L 98.8 123.5"/>
-```
-
----
-
-## 📊 Data URI Encoding
-
-### Understanding the Format
-```
-data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAw...
-│    │          │       │
-│    │          │       └─ Base64 encoded SVG content
-│    │          └───────── Encoding method (base64)
-│    └──────────────────── MIME type for SVG
-└───────────────────────── Data URI scheme
-```
-
-### Implementation in Solidity
+Minimal Solidity pattern (string constant + Base64):
 ```solidity
 import "@openzeppelin/contracts/utils/Base64.sol";
 
-function generateSVGDataURI(string memory svg) internal pure returns (string memory) {
-    return string(abi.encodePacked(
-        "data:image/svg+xml;base64,",
-        Base64.encode(bytes(svg))
-    ));
+string constant BONUS_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'>...<text>42</text></svg>";
+
+function svgDataURI() internal pure returns (string memory) {
+  return string(abi.encodePacked("data:image/svg+xml;base64,", Base64.encode(bytes(BONUS_SVG))));
 }
 ```
 
-### Alternative: URL Encoding (Smaller)
-```solidity
-function generateSVGDataURI(string memory svg) internal pure returns (string memory) {
-    // URL encode special characters
-    return string(abi.encodePacked(
-        "data:image/svg+xml,",
-        _urlEncode(svg)
-    ));
-}
-```
+Why base64?
+- Solidity strings are binary-safe but embedding raw SVG text directly into JSON or a data URI can introduce characters that break JSON or require extra escaping (quotes, newlines, characters with special meaning).
+- Base64 encodes binary/text into a safe, compact ASCII string that can be embedded inside JSON and data URIs without additional escaping.
+- Many on-chain examples wrap the SVG in a base64 `data:image/svg+xml;base64,...` so wallets and marketplaces can decode and render the image reliably.
 
----
+Simple relation (how things fit together)
 
-## 🔧 Testing On-Chain SVGs
+tokenURI(uint256 id)
+  → returns metadata (string)
+    - metadata is usually JSON (either hosted off-chain or embedded as a data URI)
+    - JSON contains fields like `name`, `description`, and `image`
+      - `image` can be:
+        - an IPFS/HTTP URL (off-chain host)
+        - a data URI: `data:image/svg+xml;base64,<base64_svg>` (on-chain SVG)
 
-### 1. Local Testing
-```solidity
-// In your test file
-function testBonusSVGGeneration() public {
-    nft.mintBonus(address(this));
-    string memory tokenURI = nft.tokenURI(0);
-    
-    // Decode and verify
-    console.log("Token URI:", tokenURI);
-    
-    // Check for data URI prefix
-    assertTrue(bytes(tokenURI).length > 0);
-}
-```
+Flow examples
+- On-chain SVG: tokenURI returns `data:application/json;base64,<base64(JSON)>` where the JSON's `image` value is `data:image/svg+xml;base64,<base64(SVG)>`.
+- Off-chain SVG: tokenURI returns `ipfs://<hash>/tokenId.json` and that JSON's `image` is `ipfs://<svg-hash>`.
 
-### 2. Browser Testing
-```javascript
-// Paste this in browser console to test SVG
-const svgData = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0i...";
-const img = document.createElement('img');
-img.src = svgData;
-document.body.appendChild(img);
-```
+Testing tips
+- Unit test: mint and call tokenURI(), assert the returned string starts with `data:image/svg+xml`.
+- Browser: paste a data URI into an <img> to preview.
 
-### 3. Online Validators
-- **SVG Validator**: https://validator.w3.org/
-- **Base64 Decoder**: https://www.base64decode.org/
-- **Data URI Maker**: https://dopiaza.org/tools/datauri/
+Optimization
+- Remove whitespace and comments; simplify paths; reuse shapes.
+- Consider URL-encoded data URIs (no base64) if they save bytes for your SVG.
 
----
+Resources
+- SVG optimization: https://web.dev/optimize-svgs/
+- Base64 helper: OpenZeppelin Base64
+- On-chain patterns: https://github.com/w1nt3r-eth/hot-chain-svg
 
-## 🎨 Design Examples
-
-### Simple Geometric
-```svg
-<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-<rect width="400" height="400" fill="#667eea"/>
-<circle cx="200" cy="200" r="100" fill="white" opacity="0.8"/>
-<text x="200" y="210" text-anchor="middle" font-size="60" fill="#667eea">42</text>
-</svg>
-```
-
-### Logo Style
-```svg
-<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-<rect width="400" height="400" fill="black"/>
-<rect x="50" y="100" width="300" height="200" fill="none" stroke="white" stroke-width="4"/>
-<text x="200" y="220" text-anchor="middle" font-size="80" fill="white" font-family="monospace">42</text>
-</svg>
-```
-
-### Gradient Alternative (Simple)
-```svg
-<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-<rect width="400" height="400" fill="#FF6B6B"/>
-<rect width="400" height="200" fill="#4ECDC4" opacity="0.7"/>
-<text x="200" y="220" text-anchor="middle" font-size="80" fill="white">42</text>
-</svg>
-```
-
----
-
-## ⚡ Advanced Techniques
-
-### Dynamic SVG Generation
-```solidity
-function generateDynamicSVG(uint256 tokenId) internal pure returns (string memory) {
-    // Use tokenId to create variations
-    uint256 hue = (tokenId * 137) % 360;  // Golden angle for color variation
-    
-    return string(abi.encodePacked(
-        '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">',
-        '<rect width="400" height="400" fill="hsl(', hue.toString(), ',70%,50%)"/>',
-        '<text x="200" y="220" text-anchor="middle" font-size="80" fill="white">',
-        tokenId.toString(),
-        '</text></svg>'
-    ));
-}
-```
-
-### Trait-Based Generation
-```solidity
-struct SVGTraits {
-    string background;
-    string textColor;
-    uint256 fontSize;
-}
-
-function generateTraitSVG(SVGTraits memory traits) internal pure returns (string memory) {
-    return string(abi.encodePacked(
-        '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">',
-        '<rect width="400" height="400" fill="', traits.background, '"/>',
-        '<text x="200" y="220" text-anchor="middle" font-size="', 
-        traits.fontSize.toString(), '" fill="', traits.textColor, '">42</text>',
-        '</svg>'
-    ));
-}
-```
-
----
-
-## 📚 Additional Resources
-
-### SVG References
-- **[SVG MDN Tutorial](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial)**
-- **[SVG Optimization Guide](https://web.dev/optimize-svgs/)**
-- **[SVGO Optimizer](https://github.com/svg/svgo)**
-
-### On-Chain NFT Examples
-- **[Loot](https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7)** - Text-based NFTs
-- **[Autoglyphs](https://etherscan.io/address/0xd4e4078ca3495de5b1d4db434bebc5a986197782)** - Generated art
-- **[Chain Runners](https://etherscan.io/address/0x97597002980134bea46250aa0510c9b90d87a587)** - Pixel art
-
-### Tools & Libraries
-- **[OpenZeppelin Base64](https://docs.openzeppelin.com/contracts/4.x/utilities#base64)**
-- **[Hot Chain SVG](https://github.com/w1nt3r-eth/hot-chain-svg)** - On-chain SVG library
-- **[SVG-to-TS](https://github.com/kreuzerk/svg-to-ts)** - Convert SVG to code
-
----
-
-**Pro Tip**: Start simple with basic shapes and text, then gradually add complexity as you optimize for gas costs! 🎨
+That's it — start small, measure gas, then iterate.
