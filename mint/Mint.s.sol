@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
-import "../code/src/Token42NFT.sol";
+import "src/Token42NFT.sol";
 
 contract MintScript is Script {
     function run() external {
@@ -18,21 +18,29 @@ contract MintScript is Script {
         
         // Connect to the deployed contract
         Token42NFT token42NFT = Token42NFT(contractAddress);
-        
-        console.log("🎨 Starting NFT minting process...");
-        console.log("📍 Contract address:", contractAddress);
-        console.log("💰 Mint price:", token42NFT.MINT_PRICE());
-        
-        // Mint NFT
-        uint256 mintPrice = token42NFT.MINT_PRICE();
-        token42NFT.mint{value: mintPrice}();
-        
-        console.log("✅ NFT minted successfully!");
-        
+
+        console.log("Starting NFT minting process...");
+        console.log("Contract address:", contractAddress);
+
+        // Read recipient and mint type from environment
+        address recipient = vm.envAddress("RECIPIENT");
+        string memory mintType = vm.envString("MINT_TYPE");
+
+        require(recipient != address(0), "RECIPIENT not set (env var)");
+
+        // Decide which mint function to call on the contract
+        if (keccak256(bytes(mintType)) == keccak256(bytes("beautiful"))) {
+            token42NFT.mintBeautiful(recipient);
+        } else {
+            token42NFT.mintBonus(recipient);
+        }
+
+        console.log("NFT minted successfully!");
+
         // Get current supply
         uint256 totalSupply = token42NFT.totalSupply();
-        console.log("📊 Total supply:", totalSupply);
-        console.log("🎯 Your token ID:", totalSupply - 1);
+        console.log("Total supply:", totalSupply);
+        console.log("Your token ID:", totalSupply - 1);
         
         vm.stopBroadcast();
         
@@ -47,6 +55,6 @@ contract MintScript is Script {
         ));
         
         vm.writeFile("./mint-info.txt", mintInfo);
-        console.log("💾 Mint info saved to mint/mint-info.txt");
+    console.log("Mint info saved to mint/mint-info.txt");
     }
 }

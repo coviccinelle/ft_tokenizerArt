@@ -59,6 +59,7 @@ dist/
 build/
 code/broadcast/
 code/lib/
+code/mint-info.txt
 
 # Secrets and keys
 *.pem
