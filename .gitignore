@@ -55,7 +55,7 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-broadcast/
+code/broadcast/
 
 # Secrets and keys
 *.pem
