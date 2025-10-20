@@ -10,6 +10,8 @@ Hybrid NFT storage: Beautiful SVGs on IPFS, Bonus SVGs on-chain.
 # Open: http://localhost:3000/native-mint.html
 ```
 
+Note: If you use multiple wallet browser extensions (e.g. Rabby), temporarily disable Rabby to avoid conflicts with MetaMask when connecting the web interface.
+
 ## Contract
 - **Address**: see `CONTRACT_ADDRESS` in your `.env` or run `./manage.sh status`
 - **Network**: Sepolia
