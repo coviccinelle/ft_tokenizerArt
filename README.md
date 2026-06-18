@@ -1,4 +1,5 @@
 # 🎨 42 NFT Collection
+<img width="1080" height="1080" alt="image" src="https://github.com/user-attachments/assets/463845e2-811c-463a-b192-689fea8763c8" />
 
 Hybrid NFT storage: Beautiful SVGs on IPFS, Bonus SVGs on-chain.
 
